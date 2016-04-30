@@ -36,10 +36,10 @@ The dataset used in this project is included as customers.csv.
 
 This project requires Python 2.7 and the following Python libraries installed:
 
-NumPy
-Pandas
-matplotlib
-scikit-learn
+- NumPy
+- Pandas
+- matplotlib
+- scikit-learn
 You will also need to have software installed to run and execute an iPython Notebook
 
 Udacity recommends our students install Anaconda, i pre-packaged Python distribution that contains all of the necessary libraries and software for this project.
