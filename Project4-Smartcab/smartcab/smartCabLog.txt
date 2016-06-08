@@ -1,0 +1,40 @@
+
+-----------------------------------
+Alpha is set to 0.05
+Gamma is set to 0.5
+-----------------------------------
+Alpha is set to 0.05
+Gamma is set to 0.5
+The agent FAILED : 98 times
+The agent SUCCEEDED : 916 times
+Success rate of : 0.903353057199
+-----------------------------------
+Alpha is set to 0.05
+Gamma is set to 0.5
+The agent FAILED : 89 times
+The agent SUCCEEDED : 938 times
+Success rate of : 0.913339824732
+-----------------------------------
+Alpha is set to 0.05
+Gamma is set to 0.5
+The agent FAILED : 53 times
+The agent SUCCEEDED : 957 times
+Success rate of : 0.947524752475
+-----------------------------------
+Alpha is set to 0.05
+Gamma is set to 0.5
+The agent FAILED : 85 times
+The agent SUCCEEDED : 937 times
+Success rate of : 0.916829745597
+-----------------------------------
+Alpha is set to 0.05
+Gamma is set to 0.5
+The agent FAILED : 127 times
+The agent SUCCEEDED : 915 times
+Success rate of : 0.878119001919
+-----------------------------------
+Alpha is set to 0.05
+Gamma is set to 0.5
+The agent FAILED : 67 times
+The agent SUCCEEDED : 949 times
+Success rate of : 0.93405511811
