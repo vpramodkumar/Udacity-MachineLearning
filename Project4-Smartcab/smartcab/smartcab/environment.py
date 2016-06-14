@@ -1,6 +1,7 @@
 import time
 import random
 from collections import OrderedDict
+import csv
 
 from simulator import Simulator
 
@@ -32,15 +33,29 @@ class Environment(object):
     # End number of trial when deadline reaches this value to avoid deadlocks.
     hard_time_limit = -100
 
-    def __init__(self):
+    def __init__(self, alpha=None, gamma=None):
         self.done = False
         self.t = 0
         self.agent_states = OrderedDict()
         self.status_text = ""
 
-        #counters for the log file
-        self.agent_reached_in_time = 0
-        self.agent_ran_out_time = 0
+        #reached or not, for logger
+        self.reached = None
+        self.results = (0, 0)
+
+        # Initialize the net rewards variable
+        self.distance_to_goal = 0
+
+        # Logging
+        # Q learning parameters
+        self.gamma = gamma if not None else 0.9
+        self.alpha = alpha if not None else 0.5
+
+        #csv file title name
+        self.trial_parameters = "Alpha={}_Gamma={}".format(self.alpha,self.gamma)
+        self.file = open(self.trial_parameters+'.csv', 'wb')
+        self.log = csv.writer(self.file)
+        self.log.writerow(("Net-Reward", "Reached"))
 
         # Road network
         self.grid_size = (8, 6)  # (cols, rows)
@@ -81,6 +96,9 @@ class Environment(object):
         self.done = False
         self.t = 0
 
+        #logger variable
+        self.reached = None
+
         # Reset traffic lights
         for traffic_light in self.intersections.itervalues():
             traffic_light.reset()
@@ -97,6 +115,7 @@ class Environment(object):
         start_heading = random.choice(self.valid_headings)
         deadline = self.compute_dist(start, destination) * 5
         print "Environment.reset(): Trial set up with start = {}, destination = {}, deadline = {}".format(start, destination, deadline)
+        self.distance_to_goal = self.compute_dist(start, destination)
 
         # Initialize agent(s)
         for agent in self.agent_states.iterkeys():
@@ -126,11 +145,16 @@ class Environment(object):
                 self.done = True
                 #print "Environment.reset(): Primary agent could not reach destination within deadline!"
                 print "Environment.step(): Primary agent reached to hard time limit ({})! Trial aborted.".format(self.hard_time_limit)
+                self.reached = 0
             elif self.enforce_deadline and agent_deadline <= 0:
                 self.done = True
                 print "Environment.step(): Primary agent ran out of time! Trial aborted."
-                self.agent_ran_out_time += 1
+                self.reached = 0
             self.agent_states[self.primary_agent]['deadline'] = agent_deadline - 1
+
+            if self.reached is not None:
+                normalized_reward = self.primary_agent.reward / float(self.distance_to_goal) #this way, the value for a reward is normalized against the distance of the trip
+                self.log.writerow([normalized_reward, self.reached])
 
     def sense(self, agent):
         assert agent in self.agent_states, "Unknown agent!"
@@ -209,7 +233,7 @@ class Environment(object):
                     reward += 10  # bonus
                 self.done = True
                 print "Environment.act(): Primary agent has reached destination!"  # [debug]
-                self.agent_reached_in_time += 1
+                self.reached = 1
             self.status_text = "state: {}\naction: {}\nreward: {}".format(agent.get_state(), action, reward)
             #print "Environment.act() [POST]: location: {}, heading: {}, action: {}, reward: {}".format(location, heading, action, reward)  # [debug]
 

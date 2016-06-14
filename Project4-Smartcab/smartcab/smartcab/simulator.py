@@ -1,7 +1,6 @@
 import os
 import time
 import random
-#import pygame
 import importlib
 
 class Simulator(object):
